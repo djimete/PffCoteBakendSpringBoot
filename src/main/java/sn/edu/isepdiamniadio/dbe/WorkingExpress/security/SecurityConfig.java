@@ -21,6 +21,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/services/**").permitAll()
+                        .requestMatchers("/api/roles/**").permitAll()
+                        .requestMatchers("/api/clients/**").permitAll()
+                        .requestMatchers("/api/prestataires/**").permitAll()
+                        .requestMatchers("/api/comptes/**").permitAll()
+                        .requestMatchers("/api/paiements/**").permitAll()
+                        .requestMatchers("/api/contacts/**").permitAll()
+                        .requestMatchers("/api/demandes/**").permitAll()
+                        .requestMatchers("/api/reclamations/**").permitAll()
+                        .requestMatchers("/api/supports/**").permitAll()
+                        .requestMatchers("/api/utilisateurs/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

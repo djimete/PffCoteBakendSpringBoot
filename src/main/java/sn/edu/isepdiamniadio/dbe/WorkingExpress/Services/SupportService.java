@@ -1,0 +1,50 @@
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.Support;
+import sn.edu.isepdiamniadio.dbe.WorkingExpress.repository.SupportRepository;
+
+import java.util.List;
+
+@Service
+public class SupportService {
+
+    @Autowired
+    private SupportRepository supportRepo;
+
+    // Créer un support
+    public Support createSupport(Support support) {
+        return supportRepo.save(support);
+    }
+
+    // Récupérer tous les supports
+    public List<Support> getAllSupports() {
+        return supportRepo.findAll();
+    }
+
+    // Récupérer un support par ID
+    public Support getSupportById(Integer id) {
+        return supportRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Support introuvable avec ID : " + id));
+    }
+
+    // Mettre à jour un support
+    public Support updateSupport(Integer id, Support updatedSupport) {
+        Support existing = supportRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Support introuvable avec ID : " + id));
+
+        existing.setTypeSupport(updatedSupport.getTypeSupport());
+        existing.setContacts(updatedSupport.getContacts());
+
+        return supportRepo.save(existing);
+    }
+
+    // Supprimer un support
+    public void deleteSupport(Integer id) {
+        if (!supportRepo.existsById(id)) {
+            throw new RuntimeException("Support introuvable avec ID : " + id);
+        }
+        supportRepo.deleteById(id);
+    }
+}

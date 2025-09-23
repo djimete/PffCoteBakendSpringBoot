@@ -9,7 +9,7 @@ import sn.edu.isepdiamniadio.dbe.WorkingExpress.repository.UtilisateurRepository
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.security.JwtUtil;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/auths")
 public class AuthController {
 
     @Autowired
