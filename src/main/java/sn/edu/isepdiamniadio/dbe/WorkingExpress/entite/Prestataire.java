@@ -2,8 +2,6 @@ package sn.edu.isepdiamniadio.dbe.WorkingExpress.entite;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,34 +24,13 @@ public class Prestataire {
     @Column(name = "prenom", nullable = false)
     private String prenom;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
     @Column(name = "adresse", nullable = false)
     private String adresse;
 
-    @Column(name = "telephone", nullable = false, unique = true)
+    @Column(name = "telephone")
     private String telephone;
 
-    //  Relation OneToOne avec Compte (login comme clé primaire)
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "login", referencedColumnName = "login")
-    private Compte compte;
-
-    //  Relation OneToMany avec Service
-    @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ExpressService> services = new ArrayList<>();
-
-    //  Relation OneToMany avec Demande
-    @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Demande> demandes = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return "Prestataire{" +
-                "idPrestataire=" + idPrestataire +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", adresse='" + adresse + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", compte=" + (compte != null ? compte.getLogin() : "null") +
-                '}';
-    }
 }

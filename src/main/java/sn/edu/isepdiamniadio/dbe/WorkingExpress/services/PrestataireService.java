@@ -1,4 +1,4 @@
-package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,9 +38,6 @@ public class PrestataireService {
         existing.setPrenom(prestataire.getPrenom());
         existing.setAdresse(prestataire.getAdresse());
         existing.setTelephone(prestataire.getTelephone());
-        existing.setCompte(prestataire.getCompte());
-        existing.setServices(prestataire.getServices());
-        existing.setDemandes(prestataire.getDemandes());
 
         return prestataireRepo.save(existing);
     }

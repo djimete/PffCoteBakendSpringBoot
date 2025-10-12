@@ -1,4 +1,4 @@
-package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,16 +26,15 @@ public class SupportService {
     // Récupérer un support par ID
     public Support getSupportById(Integer id) {
         return supportRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Support introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Support introuvable"));
     }
 
     // Mettre à jour un support
-    public Support updateSupport(Integer id, Support updatedSupport) {
+    public Support updateSupport(Integer id, Support support) {
         Support existing = supportRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Support introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Support introuvable"));
 
-        existing.setTypeSupport(updatedSupport.getTypeSupport());
-        existing.setContacts(updatedSupport.getContacts());
+        existing.setTypeSupport(support.getTypeSupport());
 
         return supportRepo.save(existing);
     }
@@ -43,7 +42,7 @@ public class SupportService {
     // Supprimer un support
     public void deleteSupport(Integer id) {
         if (!supportRepo.existsById(id)) {
-            throw new RuntimeException("Support introuvable avec ID : " + id);
+            throw new RuntimeException("Support introuvable");
         }
         supportRepo.deleteById(id);
     }

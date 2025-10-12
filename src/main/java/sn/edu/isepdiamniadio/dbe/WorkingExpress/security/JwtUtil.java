@@ -8,7 +8,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "secret123"; // à sécuriser
+    private final String SECRET_KEY = "ajdjkdAKFLKFFVaSKCDCJCJ1255DCSFGASXFFFDFFssdvvvvgbgbggajdjkdAKFLKFFVaSKCDCJCJ1255DCSFGASXFFFDFFssdvvvvgbgbgg"; // à sécuriser
     private final long EXPIRATION_TIME = 86400000; // 1 jour
 
     public String generateToken(String email) {
@@ -30,11 +30,14 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+            Claims claims=Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+            Date expiration = claims.getExpiration();
+            System.out.println("date expiration = "+expiration);
+            if(expiration != null && expiration.after(new Date())){
+                return true;
+            }
+        } catch (Exception e) {}
+        return false;
     }
 }
 

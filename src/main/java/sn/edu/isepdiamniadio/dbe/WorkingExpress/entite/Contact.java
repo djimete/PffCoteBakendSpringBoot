@@ -26,14 +26,8 @@ public class Contact {
     @Column(name = "dateContact", nullable = false)
     private LocalDate dateContact;
 
-    @Column(name = "heureContact", nullable = false)
-    private LocalTime heureContact;
-
     @Column(name = "motif", nullable = false)
     private String motif;
-
-    @ManyToMany(mappedBy = "contacts")
-    private List<Support> supports;
 
     @Override
     public String toString() {
@@ -41,9 +35,7 @@ public class Contact {
                 "idContact=" + idContact +
                 ", contenu='" + contenu + '\'' +
                 ", dateContact=" + dateContact +
-                ", heureContact=" + heureContact +
                 ", motif='" + motif + '\'' +
-                ", supports=" + supports +
                 '}';
     }
 }

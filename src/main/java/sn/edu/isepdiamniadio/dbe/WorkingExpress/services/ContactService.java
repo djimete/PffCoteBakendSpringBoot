@@ -1,4 +1,4 @@
-package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,18 +26,17 @@ public class ContactService {
     // Récupérer un contact par ID
     public Contact getContactById(Integer id) {
         return contactRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Contact introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Contact introuvable"));
     }
 
     // Mettre à jour un contact
-    public Contact updateContact(Integer id, Contact updatedContact) {
+    public Contact updateContact(Integer id, Contact contact) {
         Contact existing = contactRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Contact introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Contact introuvable"));
 
-        existing.setContenu(updatedContact.getContenu());
-        existing.setDateContact(updatedContact.getDateContact());
-        existing.setHeureContact(updatedContact.getHeureContact());
-        existing.setMotif(updatedContact.getMotif());
+        existing.setContenu(contact.getContenu());
+        existing.setDateContact(contact.getDateContact());
+        existing.setMotif(contact.getMotif());
 
         return contactRepo.save(existing);
     }
@@ -45,7 +44,7 @@ public class ContactService {
     // Supprimer un contact
     public void deleteContact(Integer id) {
         if (!contactRepo.existsById(id)) {
-            throw new RuntimeException("Contact introuvable avec ID : " + id);
+            throw new RuntimeException("Contact introuvable");
         }
         contactRepo.deleteById(id);
     }

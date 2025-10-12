@@ -1,4 +1,4 @@
-package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,19 +26,16 @@ public class DemandeService {
     // Récupérer une demande par ID
     public Demande getDemandeById(Integer id) {
         return demandeRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Demande introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Demande introuvable"));
     }
 
     // Mettre à jour une demande
-    public Demande updateDemande(Integer id, Demande updatedDemande) {
+    public Demande updateDemande(Integer id, Demande demande) {
         Demande existing = demandeRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Demande introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Demande introuvable"));
 
-        existing.setMessage(updatedDemande.getMessage());
-        existing.setDateMessage(updatedDemande.getDateMessage());
-        existing.setDateRetourDemande(updatedDemande.getDateRetourDemande());
-        existing.setStatusDemande(updatedDemande.getStatusDemande());
-        existing.setClient(updatedDemande.getClient());
+        existing.setMessage(demande.getMessage());
+        existing.setStatusDemande(demande.getStatusDemande());
 
         return demandeRepo.save(existing);
     }
@@ -46,7 +43,7 @@ public class DemandeService {
     // Supprimer une demande
     public void deleteDemande(Integer id) {
         if (!demandeRepo.existsById(id)) {
-            throw new RuntimeException("Demande introuvable avec ID : " + id);
+            throw new RuntimeException("Demande introuvable");
         }
         demandeRepo.deleteById(id);
     }

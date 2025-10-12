@@ -1,4 +1,4 @@
-package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import sn.edu.isepdiamniadio.dbe.WorkingExpress.repository.ExpressServiceReposit
 import java.util.List;
 
 @Service
-public class ServiceService {
+public class ExpressServiceService {
 
     @Autowired
     private ExpressServiceRepository serviceRepo;
@@ -26,19 +26,17 @@ public class ServiceService {
     // Récupérer un service par ID
     public ExpressService getServiceById(Integer id) {
         return serviceRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Service introuvable"));
     }
 
     // Mettre à jour un service
-    public ExpressService updateService(Integer id, ExpressService updatedService) {
+    public ExpressService updateService(Integer id, ExpressService service) {
         ExpressService existing = serviceRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Service introuvable"));
 
-        existing.setNom(updatedService.getNom());
-        existing.setTypeService(updatedService.getTypeService());
-        existing.setDescription(updatedService.getDescription());
-        existing.setPrestataire(updatedService.getPrestataire());
-        existing.setClients(updatedService.getClients());
+        existing.setNomService(service.getNomService());
+        existing.setTypeService(service.getTypeService());
+        existing.setDescription(service.getDescription());
 
         return serviceRepo.save(existing);
     }
@@ -46,7 +44,7 @@ public class ServiceService {
     // Supprimer un service
     public void deleteService(Integer id) {
         if (!serviceRepo.existsById(id)) {
-            throw new RuntimeException("Service introuvable avec ID : " + id);
+            throw new RuntimeException("Service introuvable");
         }
         serviceRepo.deleteById(id);
     }

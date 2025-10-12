@@ -1,4 +1,4 @@
-package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.stereotype.Service;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.Role;

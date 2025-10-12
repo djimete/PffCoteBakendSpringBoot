@@ -1,49 +1,138 @@
 package sn.edu.isepdiamniadio.dbe.WorkingExpress.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.Prestataire;
-import sn.edu.isepdiamniadio.dbe.WorkingExpress.Services.PrestataireService;
+import sn.edu.isepdiamniadio.dbe.WorkingExpress.services.PrestataireService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/prestataires")
+@Tag(name = "Gestion des prestataires", description = "API de gestion des prestataires (création, consultation, modification, suppression)")
 public class PrestataireController {
 
     @Autowired
     private PrestataireService prestataireService;
 
-    // Créer un prestataire
-    @PostMapping("/register")
-    public String register(@RequestBody Prestataire prestataire) {
-        prestataireService.createPrestataire(prestataire);
-        return "Prestataire enregistré avec succès";
+    @Operation(
+            summary = "Créer un prestataire",
+            description = "Permet d’ajouter un nouveau prestataire"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Prestataire créé avec succès"),
+            @ApiResponse(responseCode = "400", description = "Les données envoyées sont invalides"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
+    @PostMapping
+    public ResponseEntity createPrestataire(@RequestBody Prestataire prestataire) {
+        try {
+            prestataireService.createPrestataire(prestataire);
+            System.out.println("########## Nouveau prestataire enregistré ########");
+            System.out.println("Prestataire : " + prestataire);
+            return ResponseEntity.status(201).body("Prestataire enregistré avec succès !");
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l’enregistrement : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur interne !");
+        }
     }
 
-    // Récupérer tous les prestataires
+    @Operation(
+            summary = "Liste des prestataires",
+            description = "Retourne la liste de tous les prestataires enregistrés"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Liste des prestataires trouvée"),
+            @ApiResponse(responseCode = "404", description = "Aucun prestataire trouvé"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
     @GetMapping
-    public List<Prestataire> getAllPrestataires() {
-        return prestataireService.getAllPrestataires();
+    public ResponseEntity getAllPrestataires() {
+        List<Prestataire> prestataires = prestataireService.getAllPrestataires();
+        System.out.println("########## Liste des prestataires ########");
+        if (prestataires.isEmpty()) {
+            return ResponseEntity.status(404).body("Aucun prestataire trouvé !");
+        }
+        return ResponseEntity.ok(prestataires);
     }
 
-    // Récupérer un prestataire par ID
+    @Operation(
+            summary = "Détails d’un prestataire",
+            description = "Retourne les informations d’un prestataire via son identifiant"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Prestataire trouvé",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Prestataire.class),
+                            examples = @ExampleObject(value = "{ \"id\": 1, \"nom\": \"Sow\", \"email\": \"sow@gmail.com\" }")
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "Prestataire introuvable"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne")
+    })
     @GetMapping("/{id}")
-    public Prestataire getPrestataireById(@PathVariable Integer id) {
-        return prestataireService.getPrestataireById(id);
+    public ResponseEntity getPrestataireById(@Parameter(description = "Identifiant du prestataire") @PathVariable Integer id) {
+        Optional<Prestataire> prestataire = Optional.ofNullable(prestataireService.getPrestataireById(id));
+        if (prestataire.isPresent()) {
+            return ResponseEntity.ok(prestataire.get());
+        }
+        return ResponseEntity.status(404).body("Prestataire introuvable !");
     }
 
-    // Mettre à jour un prestataire
+    @Operation(
+            summary = "Modifier un prestataire",
+            description = "Permet de modifier les informations d’un prestataire existant"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Prestataire mis à jour avec succès"),
+            @ApiResponse(responseCode = "404", description = "Prestataire introuvable"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne")
+    })
     @PutMapping("/{id}")
-    public String updatePrestataire(@PathVariable Integer id, @RequestBody Prestataire prestataire) {
-        prestataireService.updatePrestataire(id, prestataire);
-        return "Prestataire mis à jour avec succès";
+    public ResponseEntity updatePrestataire(@Parameter(description = "Identifiant du prestataire à modifier") @PathVariable Integer id,
+                                            @RequestBody Prestataire prestataire) {
+        try {
+            prestataireService.updatePrestataire(id, prestataire);
+            System.out.println("########## Mise à jour du prestataire ########");
+            System.out.println("Prestataire : " + prestataire);
+            return ResponseEntity.ok("Prestataire mis à jour avec succès !");
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la mise à jour : " + e.getMessage());
+            return ResponseEntity.status(500).body("Erreur interne !");
+        }
     }
 
-    // Supprimer un prestataire
+    @Operation(
+            summary = "Supprimer un prestataire",
+            description = "Supprime un prestataire à partir de son identifiant"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Prestataire supprimé avec succès"),
+            @ApiResponse(responseCode = "404", description = "Prestataire introuvable"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne")
+    })
     @DeleteMapping("/{id}")
-    public String deletePrestataire(@PathVariable Integer id) {
-        prestataireService.deletePrestataire(id);
-        return "Prestataire supprimé avec succès";
+    public ResponseEntity deletePrestataire(@Parameter(description = "Identifiant du prestataire à supprimer") @PathVariable Integer id) {
+        try {
+            prestataireService.deletePrestataire(id);
+            System.out.println("########## Suppression du prestataire ########");
+            System.out.println("Prestataire supprimé : " + id);
+            return ResponseEntity.ok("Prestataire supprimé avec succès !");
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la suppression : " + e.getMessage());
+            return ResponseEntity.status(500).body("Erreur interne !");
+        }
     }
 }

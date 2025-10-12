@@ -1,4 +1,4 @@
-package sn.edu.isepdiamniadio.dbe.WorkingExpress.Services;
+package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,19 +26,17 @@ public class ReclamationService {
     // Récupérer une réclamation par ID
     public Reclamation getReclamationById(Integer id) {
         return reclamationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Réclamation introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Réclamation introuvable"));
     }
 
     // Mettre à jour une réclamation
-    public Reclamation updateReclamation(Integer id, Reclamation updatedReclamation) {
+    public Reclamation updateReclamation(Integer id, Reclamation reclamation) {
         Reclamation existing = reclamationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Réclamation introuvable avec ID : " + id));
+                .orElseThrow(() -> new RuntimeException("Réclamation introuvable"));
 
-        existing.setMessage(updatedReclamation.getMessage());
-        existing.setDateReclamation(updatedReclamation.getDateReclamation());
-        existing.setHeureReclamation(updatedReclamation.getHeureReclamation());
-        existing.setStatusReclamation(updatedReclamation.getStatusReclamation());
-        existing.setClient(updatedReclamation.getClient());
+        existing.setMessage(reclamation.getMessage());
+        existing.setDateReclamation(reclamation.getDateReclamation());
+        existing.setStatusReclamation(reclamation.getStatusReclamation());
 
         return reclamationRepo.save(existing);
     }
@@ -46,7 +44,7 @@ public class ReclamationService {
     // Supprimer une réclamation
     public void deleteReclamation(Integer id) {
         if (!reclamationRepo.existsById(id)) {
-            throw new RuntimeException("Réclamation introuvable avec ID : " + id);
+            throw new RuntimeException("Réclamation introuvable");
         }
         reclamationRepo.deleteById(id);
     }
