@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.dto.AuthRequest;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.dto.AuthResponse;
 
@@ -17,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static sn.edu.isepdiamniadio.dbe.WorkingExpress.Config.LOGIN_URL;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+
 public class AuthentificationTest {
     private final Logger logger = LoggerFactory.getLogger(AuthentificationTest.class);
 

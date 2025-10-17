@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static sn.edu.isepdiamniadio.dbe.WorkingExpress.Config.LOGIN_URL;
 import static sn.edu.isepdiamniadio.dbe.WorkingExpress.Config.ROLES_URL;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
 public class RoleTest {
 
     private final Logger logger = LoggerFactory.getLogger(RoleTest.class);
