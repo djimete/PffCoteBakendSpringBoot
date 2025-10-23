@@ -18,23 +18,23 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    // 🔹 Créer un client
+    //  Créer un client
     public Client createClient(Client client) {
         return clientRepository.save(client);
     }
 
-    // 🔹 Récupérer tous les clients
+    //  Récupérer tous les clients
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
-    // 🔹 Récupérer un client par ID
+    //  Récupérer un client par ID
     public Client getClientById(Integer id) {
         return clientRepository.findById(id)
                 .orElse(null);
     }
 
-    // 🔹 Mettre à jour un client
+    //  Mettre à jour un client
     public Client updateClient(Integer id, Client clientDetails) {
         Optional<Client> clientOpt = clientRepository.findById(id);
         if (!clientOpt.isPresent()) {
@@ -48,7 +48,7 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    // 🔹 Supprimer un client
+    //  Supprimer un client
     public void deleteClient(Integer id) {
         Optional<Client> clientOpt = clientRepository.findById(id);
         if (!clientOpt.isPresent()) {
@@ -57,7 +57,7 @@ public class ClientService {
         clientRepository.deleteById(id);
     }
 
-    // 🔹 Rechercher un client par email (optionnel)
+    //  Rechercher un client par email (optionnel)
     public Optional<Client> findByEmail(String email) {
         return clientRepository.findByEmail(email);
     }

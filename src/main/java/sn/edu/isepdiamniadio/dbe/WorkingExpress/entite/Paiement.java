@@ -29,7 +29,7 @@ public class Paiement {
     private LocalDateTime datePaiement;
 
 
-    // 🔹 Relation ManyToOne avec Client
+    //  Relation ManyToOne avec Client
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;

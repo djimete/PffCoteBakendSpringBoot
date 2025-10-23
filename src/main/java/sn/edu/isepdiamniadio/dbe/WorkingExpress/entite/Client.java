@@ -33,6 +33,5 @@ public class Client {
     @Column(name = "adresse", nullable = false)
     private String adresse;
 
-    // Relation ManyToMany avec ExpressService si nécessaire
-    // @ManyToMany ...
+
 }
