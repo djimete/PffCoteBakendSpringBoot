@@ -22,6 +22,7 @@ public class Email {
 
     @Column(length = 5000)
     private String contenu;
+    private String statut;
 
     public Email() {}
 

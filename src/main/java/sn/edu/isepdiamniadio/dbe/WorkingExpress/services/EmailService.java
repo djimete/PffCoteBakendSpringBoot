@@ -1,6 +1,8 @@
 package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.Email;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.repository.EmailRepository;
@@ -13,10 +15,35 @@ public class EmailService {
     @Autowired
     private EmailRepository emailRepository;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
+    private void sendSimpleMessage(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        message.setBcc("djimou.meta081@gmail.com","awa1999fall@gmail.com","adiarasall208@gmail.com","awasegnane77@gmail.com");
+        message.setFrom("\"Working Express\"<no-reply@working-express.com>");
+        System.out.println("############# Sending email...");
+        mailSender.send(message);
+    }
+
     // Enregistrer un email + simuler l’envoi
     public void envoyerEmail(String destinataire, String sujet, String contenu) {
         Email email = new Email(destinataire, sujet, contenu);
+        email.setStatut("en_cours");
         emailRepository.save(email);
+        try {
+            sendSimpleMessage(destinataire,sujet,contenu);
+            email.setStatut("ok");
+        }catch (Exception ex){
+            email.setStatut("error");
+        }finally {
+            emailRepository.save(email);
+        }
+
+
 
         System.out.println("Email envoyé à " + destinataire + " : " + contenu);
     }
