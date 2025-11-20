@@ -23,7 +23,7 @@ public class EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
-        message.setBcc("djimou.meta081@gmail.com","awa1999fall@gmail.com","adiarasall208@gmail.com","awasegnane77@gmail.com");
+        message.setBcc("djimou.meta081@gmail.com","awa1999fall@gmail.com","adiarasall208@gmail.com","awasegnane67@gmail.com");
         message.setFrom("\"Working Express\"<no-reply@working-express.com>");
         System.out.println("############# Sending email...");
         mailSender.send(message);
