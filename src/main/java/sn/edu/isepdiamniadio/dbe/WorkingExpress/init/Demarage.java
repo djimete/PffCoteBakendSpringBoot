@@ -15,7 +15,7 @@ public class Demarage implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        emailService.envoyerEmail("sambasidibe@gmail.com","demarage du serveur","bonjour le système vient de démarer");
+        emailService.envoyerEmail("djimouansou66@gmail.com","demarage du serveur","bonjour le système vient de démarer");
 
     }
 }
