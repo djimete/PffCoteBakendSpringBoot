@@ -3,9 +3,9 @@ package sn.edu.isepdiamniadio.dbe.WorkingExpress.services;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.Utilisateur;
-import sn.edu.isepdiamniadio.dbe.WorkingExpress.repository.UtilisateurRepository;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.dto.InscriptionRequest;
 import sn.edu.isepdiamniadio.dbe.WorkingExpress.entite.dto.ValidationRequest;
+import sn.edu.isepdiamniadio.dbe.WorkingExpress.repository.UtilisateurRepository;
 
 import java.util.*;
 
@@ -15,7 +15,7 @@ public class UtilisateurService {
     private final UtilisateurRepository repo;
     private final EmailService emailService;
 
-    //  Stockage temporaire des codes de validation
+    // Stockage temporaire des codes de validation
     private final Map<String, String> codesValidation = new HashMap<>();
 
     public UtilisateurService(UtilisateurRepository repo, EmailService emailService) {
@@ -24,15 +24,27 @@ public class UtilisateurService {
     }
 
     /**
-     * Étape 1 : Inscription
-     * Envoie un code de validation par email
+     * ÉTAPE 1 : INSCRIPTION
+     * Création de l'utilisateur (INACTIF) + envoi du code par email
      */
     public String inscrireUtilisateur(InscriptionRequest req) {
+
         if (repo.existsByEmail(req.getEmail())) {
             throw new RuntimeException("Un utilisateur avec cet email existe déjà !");
         }
 
         String code = String.valueOf(new Random().nextInt(900000) + 100000);
+
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setNom(req.getNom());
+        utilisateur.setPrenom(req.getPrenom());
+        utilisateur.setEmail(req.getEmail());
+        utilisateur.setTelephone(req.getTelephone());
+        utilisateur.setAdresse(req.getAdresse());
+        utilisateur.setActif(false);
+
+        repo.save(utilisateur); // ✅ INSERT propre
+
         codesValidation.put(req.getEmail(), code);
 
         emailService.envoyerEmail(
@@ -45,21 +57,24 @@ public class UtilisateurService {
     }
 
     /**
-     * Étape 2 : Validation du code et création de l'utilisateur
+     * ÉTAPE 2 : VALIDATION EMAIL
+     * Vérifie le code et ACTIVE le compte
      */
     public Utilisateur validerEmail(ValidationRequest req) {
+
         String codeStocke = codesValidation.get(req.getEmail());
 
-        if (codeStocke != null && codeStocke.equals(req.getCode())) {
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setEmail(req.getEmail());
-            utilisateur.setActif(true);
-            Utilisateur saved = repo.save(utilisateur);
-            codesValidation.remove(req.getEmail());
-            return saved;
+        if (codeStocke == null || !codeStocke.equals(req.getCode())) {
+            throw new IllegalArgumentException("Code invalide ou expiré !");
         }
 
-        throw new IllegalArgumentException("Code invalide ou email non trouvé !");
+        Utilisateur utilisateur = repo.findByEmail(req.getEmail())
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
+        utilisateur.setActif(true);
+        codesValidation.remove(req.getEmail());
+
+        return repo.save(utilisateur); // ✅ UPDATE
     }
 
     // CRUD

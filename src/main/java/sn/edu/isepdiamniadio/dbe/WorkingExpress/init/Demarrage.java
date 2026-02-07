@@ -15,7 +15,7 @@ public class Demarrage implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        emailService.envoyerEmail("djimouansou66@gmail.com","demarrage du serveur","bonjour le système vient de démarrer");
+        emailService.envoyerEmail("djimou.meta081@gmail.com","demarrage du serveur","bonjour le système vient de démarrer");
 
     }
 }
