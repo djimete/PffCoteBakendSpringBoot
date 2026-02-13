@@ -25,9 +25,9 @@ public class InscriptionController {
 
     @Operation(summary = "Inscription utilisateur", description = "Envoie un code de validation par e-mail")
     @PostMapping
-    public ResponseEntity<String> inscrire(@RequestBody InscriptionRequest req) {
+    public ResponseEntity inscrire(@RequestBody InscriptionRequest req) {
         String code = utilisateurService.inscrireUtilisateur(req);
-        return ResponseEntity.ok("Code envoyé à " + req.getEmail());
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Validation e-mail", description = "Valide le code reçu et active le compte utilisateur")
